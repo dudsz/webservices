@@ -57,6 +57,21 @@ class Testing {
 		}
 	}
 
+	public function shareWishList($un, $wln, $sun) {
+		$stmt = $this->conn->prepare("insert into wishListShared (username, wishListName, shareToUser) values (:un, :wln, :sun)");
+		$stmt->bindParam(':un', $un);
+		$stmt->bindParam(':wln', $wln);
+		$stmt->bindParam(':sun', $sun);
+		$result = $stmt->execute();
+
+		// Check return
+		if ($result) {
+			return $result;
+		} else {
+			return false;
+		}
+	}
+
 	public function getLists($username) {
 		$stmt = $this->conn->prepare("select distinct  wishListName
 			from wishLists where username = :un");
@@ -79,7 +94,7 @@ class Testing {
 		$stmt->bindParam(':wl', $wl);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
-		
+
 		echo $result["wishItemName"];
 		if ($result) {
 			return $result;
@@ -124,7 +139,7 @@ class Testing {
 		$stmt->bindParam(':un', $un);
 		$stmt->bindParam(':wln', $wln);
 		$stmt->bindParam(':win', $win);
-		$stmt->execute();		
+		$stmt->execute();
 		$result = $stmt->rowCount();
 		//$stmt->close();
 		if ($result > 0) {
@@ -156,7 +171,49 @@ class Testing {
 			return false;
 		}
 	}
+
+	public function checkUser($username) {
+                $stmt = $this->conn->prepare("select un from 
+			users where un = :un");
+                $stmt->bindParam(':un', $username);
+		$stmt->execute();
+                $result = $stmt->fetch();
+ 
+                if ($result) {
+			// Username already in use
+                        return $result;
+                } else {
+                        return false;
+                }
+        }
+
+	public function checkSharing($username, $wln, $sun) {
+		$stmt = $this->conn->prepare("select * from wishListShared where username = :un and wishListName = :wln and shareToUser = :sun");
+		$stmt->bindParam(':un', $username);
+		$stmt->bindParam(':wln', $wln);
+		$stmt->bindParam(':sun', $sun);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+
+		if ($result) {
+			return $result;
+		} else {
+			return false;
+		}
+	}
+
+	public function getFriendList($username) {
+		$stmt = $this->conn->prepare("select distinct shareToUser
+			from wishListShared where username = :un");
+		$stmt->bindParam(':un', $username);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+
+		if ($result) {
+			return $result;
+		} else {
+			return false;
+		}
+	}
 }
-
-
 ?>

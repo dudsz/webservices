@@ -1,0 +1,34 @@
+create database wishyDb;
+
+create table users (uId INT PRIMARY KEY AUTO_INCREMENT,
+                    un VARCHAR(50) UNIQUE NOT NULL,
+                    pw VARCHAR(50) NOT NULL
+                    email VARCHAR(50) UNIQUE NOT NULL);
+                    
+create table users (uId INT PRIMARY KEY AUTO_INCREMENT,
+                    username VARCHAR(50) UNIQUE NOT NULL,
+                    password VARCHAR(50) NOT NULL);
+
+// Ta bort wishListName och använd foreign key?
+create table wishes (wId INT PRIMARY KEY AUTO_INCREMENT, 
+                     username VARCHAR(50) NOT NULL, 
+                     wishListName VARCHAR(30) NOT NULL, 
+                     wishItemName VARCHAR(30) NOT NULL, 
+                     wishItemDesc VARCHAR(100), 
+                     wishItemAvailableAt VARCHAR(30));
+                     
+create table wishItems (wId INT PRIMARY KEY AUTO_INCREMENT, 
+                     username VARCHAR(50) NOT NULL, 
+                     wishListName VARCHAR(30) NOT NULL, 
+                     wishItemName VARCHAR(30) NOT NULL, 
+                     wishItemDesc VARCHAR(100), 
+                     wishItemAvailableAt VARCHAR(30));
+
+create table wishLists (wLId INT PRIMARY KEY AUTO_INCREMENT,
+                       username VARCHAR(50) NOT NULL,
+                       wishListName VARCHAR(30) NOT NULL);
+                       
+create table wishListShared (wLSId INT PRIMARY KEY AUTO_INCREMENT,
+                       username VARCHAR(50) NOT NULL,
+                       wishListName VARCHAR(30) NOT NULL,
+                       shareToUser VARCHAR(50) NOT NULL);

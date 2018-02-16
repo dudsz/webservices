@@ -16,18 +16,26 @@ if (isset($_POST['un']) && !empty($_POST['un'])) {
 		foreach ($wLists as $wList) {
 			$il = array();
 			$itemList = $db->getWishList($username, $wList["wishListName"]);
+			$friendList = $db->getFriendList($username, $wList["wishListName"]);
+			$names = array();
+			foreach ($friendList as $name) {
+				$names[] = $name["shareToUser"];
+			}
 			if (!$itemList) {
 				$emptyArray = array();
 				$il["wishListName"] = $wList["wishListName"];
 				$il["wishList"] = $emptyArray;
+				$il["friendList"] = $emptyArray;
 				$list[] = $il;
 			} else {
 				$il["wishListName"] = $wList["wishListName"];
 				$il["wishList"] = $itemList;
-				$list[] = $il;				
+				$il["friendList"] = $names;
+				$list[] = $il;
 			}
 		}
 		$jResponse["wishLists"] = $list;
+		//$jResponse["friendList"] = $friendList;
 		echo json_encode($jResponse);
 	} else {
 		// Failed to find a list for specifed user

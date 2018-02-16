@@ -95,7 +95,7 @@ class Testing {
 		$stmt->execute();
 		$result = $stmt->fetchAll();
 
-		echo $result["wishItemName"];
+		//echo $result["wishItemName"];
 		if ($result) {
 			return $result;
 		} else {
@@ -202,10 +202,11 @@ class Testing {
 		}
 	}
 
-	public function getFriendList($username) {
-		$stmt = $this->conn->prepare("select distinct shareToUser
-			from wishListShared where username = :un");
+	public function getFriendList($username, $wln) {
+		$stmt = $this->conn->prepare("select shareToUser
+			from wishListShared where username = :un and wishListName = :wln");
 		$stmt->bindParam(':un', $username);
+		$stmt->bindParam(':wln', $wln);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
 
